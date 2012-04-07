@@ -205,7 +205,7 @@ public class FindMoves {
 					break;
 				case 'k':
 				case 'K':
-					int[] xsk = {-1,-1,1,0,0,1,1,1};
+					int[] xsk = {-1,-1,-1,0,0,1,1,1};
 					int[] ysk = {-1,0,1,-1,1,-1,0,1};
 					for(int i=0;i<xsk.length;++i) {
 						int curDist = 1;
@@ -247,6 +247,7 @@ public class FindMoves {
 		}
 		
 	}
+	
 	
 	public static ArrayList<Point> makePair(int x, int y, int newX, int newY) {
 		ArrayList<Point> toRet = new ArrayList<Point>();
