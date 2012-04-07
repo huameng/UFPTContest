@@ -397,13 +397,3 @@ public class LoserChess{
 		return (x >= 0 && y >= 0 && x < 8 && y < 8);
 	}
 }
-
-class Point{
-	public int x;
-	public int y;
-
-	public Point(int row, int column){
-		this.x = row;
-		this.y = column;
-	}
-}
