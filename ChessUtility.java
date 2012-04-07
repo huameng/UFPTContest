@@ -1,6 +1,28 @@
 import java.util.*;
 
 public class ChessUtility {
+
+	public static int evalBoard(char[][] state, int player)
+	{
+		double diffCheckFactor = 2.0;
+		
+		List<Point> myInCheck = findPiecesInCheck(player, state);
+		List<Point> myPieces = findPieces(player, state);
+		int myInCheck = myInCheck.size();
+		int myNumPieces = myPieces.size();	// Lower = better
+		
+		int enemyPlayer = (player == 1) ? 2 : 1;
+		List<Point> enemyInCheck = findPiecesInCheck(enemyPlayer, state);
+		List<Point> enemyPieces = findPieces(enemyPlayer, state);
+		int enemyInCheck = enemyInCheck.size();
+		int enemyNumPieces = enemyPieces.size();	// More = better
+		
+		int diffCount = enemyNumPieces - myNumPieces;	// higher = better
+		int diffCheck = myInCheck - enemyInCheck;	// higher = better
+		
+		return diffCount + diffCheck*diffCheckFactor;
+	}
+	
 	public static ArrayList<Point> findPiecesInCheck(int player, char[][] board) {
 		// IF YOU ARE COMBINING THIS WITH ANOTHER CLASS, REMEMBER TO REMOVE "FindMoves." BELOW
 		ArrayList<ArrayList<Point>> theirMoves = FindMoves.getMoves(player == 1 ? 2 : 1, board);
@@ -42,5 +64,23 @@ public class ChessUtility {
 			}
 		}
 		return toRet;
+	}
+	
+	public static int numPieces(char[][] state, int player)
+	{
+		int count1 = 0;
+		int count2 = 0;
+		for (int i = 0; i<state.length; ++i) {
+			for (int j = 0; j<state[0].length; ++j) {
+				if (state[i][j] == '.') continue;
+				if (state[i][j] >= 'a' && state[i][j] <= 'z' && player== 1) count1++;
+				if (state[i][j] >= 'A' && state[i][j] <= 'Z' && player == 2) count2++;
+			}
+		}
+		
+		if(player==1)
+			return count1;
+		else // player==2
+			return count2;
 	}
 }
