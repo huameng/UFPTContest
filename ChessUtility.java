@@ -2,7 +2,18 @@ import java.util.*;
 
 public class ChessUtility {
 
-	public static int evalBoard(char[][] state, int player)
+	public static int eval1(char[][] state, int player)
+	{
+		int myPiecesNum = findPieces(player,state).size();
+		int enemyPiecesNum = findPieces(player,state).size();
+		
+		int diff = enemyPiecesNum - myPiecesNum;
+		
+		return diff;
+	}
+
+
+	public static int eval2(char[][] state, int player)
 	{
 		double diffCheckFactor = 2.0;
 		double diffCountFactor = 1.0;
