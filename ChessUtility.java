@@ -5,22 +5,23 @@ public class ChessUtility {
 	public static int evalBoard(char[][] state, int player)
 	{
 		double diffCheckFactor = 2.0;
+		double diffCountFactor = 1.0;
 		
 		List<Point> myInCheck = findPiecesInCheck(player, state);
 		List<Point> myPieces = findPieces(player, state);
-		int myInCheck = myInCheck.size();
+		int myInCheckNum = myInCheck.size();
 		int myNumPieces = myPieces.size();	// Lower = better
 		
 		int enemyPlayer = (player == 1) ? 2 : 1;
 		List<Point> enemyInCheck = findPiecesInCheck(enemyPlayer, state);
 		List<Point> enemyPieces = findPieces(enemyPlayer, state);
-		int enemyInCheck = enemyInCheck.size();
+		int enemyInCheckNum = enemyInCheck.size();
 		int enemyNumPieces = enemyPieces.size();	// More = better
 		
 		int diffCount = enemyNumPieces - myNumPieces;	// higher = better
-		int diffCheck = myInCheck - enemyInCheck;	// higher = better
+		int diffCheck = myInCheckNum - enemyInCheckNum;	// higher = better
 		
-		return diffCount + diffCheck*diffCheckFactor;
+		return (int)(diffCount*diffCountFactor) + (int)(diffCheck*diffCheckFactor);
 	}
 	
 	public static ArrayList<Point> findPiecesInCheck(int player, char[][] board) {

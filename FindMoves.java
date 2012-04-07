@@ -273,15 +273,3 @@ public class FindMoves {
 		return (x >= 0 && y >= 0 && x < 8 && y < 8);
 	}
 }
-
-class Point {
-	int x, y; 
-	public Point(int x, int y) {
-		this.x = x;
-		this.y = y;
-	}
-	
-	public String toString() {
-		return this.x + " " + this.y;
-	}
-}
