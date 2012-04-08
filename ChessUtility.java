@@ -102,7 +102,7 @@ public class ChessUtility {
 	public static HashSet<Point> findPiecesInCheck(int player, char[][] board) {
 		// IF YOU ARE COMBINING THIS WITH ANOTHER CLASS, REMEMBER TO REMOVE "FindMoves." BELOW
 		ArrayList<ArrayList<Point>> theirMoves = FindMoves.getMoves(player == 1 ? 2 : 1, board);
-		HashSet<Point> points = new HashSet<Point>();
+		HashSet<Point> points = new HashSet<Point>(16);
 		for(ArrayList<Point> a : theirMoves) {
 			Point to = a.get(1);
 			if (board[to.x][to.y] == '.') {
@@ -116,7 +116,7 @@ public class ChessUtility {
 	}
 	
 	public static ArrayList<Point> findPieces(int player, char[][] board) {
-		ArrayList<Point> toRet = new ArrayList<Point>();
+		ArrayList<Point> toRet = new ArrayList<Point>(16);
 		for(int i=0;i<8;++i) {
 			for(int j=0;j<8;++j) {
 				if (board[i][j] == '.') {
@@ -140,8 +140,8 @@ public class ChessUtility {
 		for (int i = 0; i<state.length; ++i) {
 			for (int j = 0; j<state[0].length; ++j) {
 				if (state[i][j] == '.') continue;
-				if (state[i][j] >= 'a' && state[i][j] <= 'z' && player== 1) count1++;
-				if (state[i][j] >= 'A' && state[i][j] <= 'Z' && player == 2) count2++;
+				if (state[i][j] >= 'a' && player== 1) count1++;
+				if (state[i][j] <= 'Z' && player == 2) count2++;
 			}
 		}
 		
