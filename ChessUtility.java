@@ -18,13 +18,13 @@ public class ChessUtility {
 		double diffCheckFactor = 2.0;
 		double diffCountFactor = 1.0;
 		
-		List<Point> myInCheck = findPiecesInCheck(player, state);
+		Set<Point> myInCheck = findPiecesInCheck(player, state);
 		List<Point> myPieces = findPieces(player, state);
 		int myInCheckNum = myInCheck.size();
 		int myNumPieces = myPieces.size();	// Lower = better
 		
 		int enemyPlayer = (player == 1) ? 2 : 1;
-		List<Point> enemyInCheck = findPiecesInCheck(enemyPlayer, state);
+		Set<Point> enemyInCheck = findPiecesInCheck(enemyPlayer, state);
 		List<Point> enemyPieces = findPieces(enemyPlayer, state);
 		int enemyInCheckNum = enemyInCheck.size();
 		int enemyNumPieces = enemyPieces.size();	// More = better
@@ -40,13 +40,13 @@ public class ChessUtility {
 		double diffCheckFactor = 2.0;
 		double diffCountFactor = 1.0;
 		
-		List<Point> myInCheck = findPiecesInCheck(player, state);
+		Set<Point> myInCheck = findPiecesInCheck(player, state);
 		List<Point> myPieces = findPieces(player, state);
 		int myInCheckNum = myInCheck.size();
 		int myNumPieces = myPieces.size();	// Lower = better
 		
 		int enemyPlayer = (player == 1) ? 2 : 1;
-		List<Point> enemyInCheck = findPiecesInCheck(enemyPlayer, state);
+		Set<Point> enemyInCheck = findPiecesInCheck(enemyPlayer, state);
 		List<Point> enemyPieces = findPieces(enemyPlayer, state);
 		int enemyInCheckNum = enemyInCheck.size();
 		int enemyNumPieces = enemyPieces.size();	// More = better
@@ -99,26 +99,17 @@ public class ChessUtility {
 		return score;
 	}
 	
-	public static ArrayList<Point> findPiecesInCheck(int player, char[][] board) {
+	public static HashSet<Point> findPiecesInCheck(int player, char[][] board) {
 		// IF YOU ARE COMBINING THIS WITH ANOTHER CLASS, REMEMBER TO REMOVE "FindMoves." BELOW
 		ArrayList<ArrayList<Point>> theirMoves = FindMoves.getMoves(player == 1 ? 2 : 1, board);
-		ArrayList<Point> points = new ArrayList<Point>();
+		HashSet<Point> points = new HashSet<Point>();
 		for(ArrayList<Point> a : theirMoves) {
 			Point to = a.get(1);
 			if (board[to.x][to.y] == '.') {
 				return points;
 			}
 			else {
-				boolean alreadyThere = false;
-				for(Point p : points) {
-					if (p.x == to.x && p.y == to.y) {
-						alreadyThere = true;
-						break;
-					}
-				}
-				if (!alreadyThere) {
-					points.add(to);
-				}
+				points.add(to);
 			}
 		}
 		return points;
