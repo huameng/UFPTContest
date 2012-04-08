@@ -64,7 +64,7 @@ public class ChessUtility {
 		double pieceTypeFactor = 1.0;
 		
 		double goodVal = 1.0;
-		double badVal = 2.5;
+		double badVal = 2.0;
 		
 		for(Point p : myPieces)
 		{
@@ -72,7 +72,7 @@ public class ChessUtility {
 			switch(piece)
 			{
 				case 'p': case 'P': case 'k': case 'K': case 'n': case 'N':
-					pieceTypeVal += goodVal;
+					pieceTypeVal -= goodVal;
 					break;
 				case 'q': case 'Q': case 'r': case 'R': case 'b': case 'B':
 					pieceTypeVal -= badVal;
@@ -86,7 +86,7 @@ public class ChessUtility {
 			switch(piece)
 			{
 				case 'p': case 'P': case 'k': case 'K': case 'n': case 'N':
-					pieceTypeVal -= goodVal;
+					pieceTypeVal += goodVal;
 					break;
 				case 'q': case 'Q': case 'r': case 'R': case 'b': case 'B':
 					pieceTypeVal += badVal;
