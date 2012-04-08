@@ -6,9 +6,9 @@ public class ChessUtility {
 	{
 		int myPiecesNum = findPieces(player,state).size();
 		int enemyPiecesNum = findPieces(player,state).size();
-		
+
 		int diff = enemyPiecesNum - myPiecesNum;
-		
+
 		return diff;
 	}
 
@@ -17,88 +17,88 @@ public class ChessUtility {
 	{
 		double diffCheckFactor = 2.0;
 		double diffCountFactor = 1.0;
-		
+
 		Set<Point> myInCheck = findPiecesInCheck(player, state);
 		List<Point> myPieces = findPieces(player, state);
 		int myInCheckNum = myInCheck.size();
-		int myNumPieces = myPieces.size();	// Lower = better
-		
+		int myNumPieces = myPieces.size(); // Lower = better
+
 		int enemyPlayer = (player == 1) ? 2 : 1;
 		Set<Point> enemyInCheck = findPiecesInCheck(enemyPlayer, state);
 		List<Point> enemyPieces = findPieces(enemyPlayer, state);
 		int enemyInCheckNum = enemyInCheck.size();
-		int enemyNumPieces = enemyPieces.size();	// More = better
-		
-		int diffCount = enemyNumPieces - myNumPieces;	// higher = better
-		int diffCheck = myInCheckNum - enemyInCheckNum;	// higher = better
-		
+		int enemyNumPieces = enemyPieces.size(); // More = better
+
+		int diffCount = enemyNumPieces - myNumPieces; // higher = better
+		int diffCheck = myInCheckNum - enemyInCheckNum; // higher = better
+
 		return (int)(diffCount*diffCountFactor) + (int)(diffCheck*diffCheckFactor);
 	}
-	
+
 	public static int eval3(char[][] state, int player)
 	{
 		double diffCheckFactor = 2.0;
 		double diffCountFactor = 1.0;
-		
+
 		Set<Point> myInCheck = findPiecesInCheck(player, state);
 		List<Point> myPieces = findPieces(player, state);
 		int myInCheckNum = myInCheck.size();
-		int myNumPieces = myPieces.size();	// Lower = better
-		
+		int myNumPieces = myPieces.size(); // Lower = better
+
 		int enemyPlayer = (player == 1) ? 2 : 1;
 		Set<Point> enemyInCheck = findPiecesInCheck(enemyPlayer, state);
 		List<Point> enemyPieces = findPieces(enemyPlayer, state);
 		int enemyInCheckNum = enemyInCheck.size();
-		int enemyNumPieces = enemyPieces.size();	// More = better
-		
-		int diffCount = enemyNumPieces - myNumPieces;	// higher = better
-		int diffCheck = myInCheckNum - enemyInCheckNum;	// higher = better
-		
+		int enemyNumPieces = enemyPieces.size(); // More = better
+
+		int diffCount = enemyNumPieces - myNumPieces; // higher = better
+		int diffCheck = myInCheckNum - enemyInCheckNum; // higher = better
+
 		int score = 0;
-		
+
 		score += (int)(diffCount*diffCountFactor);
 		score += (int)(diffCheck*diffCheckFactor);
-		
+
 		// Modify score based on types of pieces on the board
 		int pieceTypeVal = 0;
 		double pieceTypeFactor = 1.0;
-		
+
 		double goodVal = 1.0;
 		double badVal = 2.0;
-		
+
 		for(Point p : myPieces)
 		{
 			char piece = state[p.x][p.y];
 			switch(piece)
 			{
 				case 'p': case 'P': case 'k': case 'K': case 'n': case 'N':
-					pieceTypeVal -= goodVal;
-					break;
+				pieceTypeVal -= goodVal;
+				break;
 				case 'q': case 'Q': case 'r': case 'R': case 'b': case 'B':
-					pieceTypeVal -= badVal;
-					break;
+				pieceTypeVal -= badVal;
+				break;
 			}
 		}
-		
+
 		for(Point p : enemyPieces)
 		{
 			char piece = state[p.x][p.y];
 			switch(piece)
 			{
 				case 'p': case 'P': case 'k': case 'K': case 'n': case 'N':
-					pieceTypeVal += goodVal;
-					break;
+				pieceTypeVal += goodVal;
+				break;
 				case 'q': case 'Q': case 'r': case 'R': case 'b': case 'B':
-					pieceTypeVal += badVal;
-					break;
+				pieceTypeVal += badVal;
+				break;
 			}
 		}
-		
+
 		score += (int)(pieceTypeVal*pieceTypeFactor);
-		
+
 		return score;
 	}
-	
+
 	public static HashSet<Point> findPiecesInCheck(int player, char[][] board) {
 		// IF YOU ARE COMBINING THIS WITH ANOTHER CLASS, REMEMBER TO REMOVE "FindMoves." BELOW
 		ArrayList<ArrayList<Point>> theirMoves = FindMoves.getMoves(player == 1 ? 2 : 1, board);
@@ -115,6 +115,23 @@ public class ChessUtility {
 		return points;
 	}
 	
+	public static HashSet<Point> findPiecesChecking(int player, char[][] board) {
+		// IF YOU ARE COMBINING THIS WITH ANOTHER CLASS, REMEMBER TO REMOVE "FindMoves." BELOW
+		ArrayList<ArrayList<Point>> theirMoves = FindMoves.getMoves(player == 1 ? 2 : 1, board);
+		HashSet<Point> points = new HashSet<Point>(16);
+		for(ArrayList<Point> a : theirMoves) {
+			Point from = a.get(0);
+			Point to = a.get(1);
+			if (board[to.x][to.y] == '.') {
+				return points;
+			}
+			else {
+				points.add(from);
+			}
+		}
+		return points;
+	}
+
 	public static ArrayList<Point> findPieces(int player, char[][] board) {
 		ArrayList<Point> toRet = new ArrayList<Point>(16);
 		for(int i=0;i<8;++i) {
@@ -132,7 +149,7 @@ public class ChessUtility {
 		}
 		return toRet;
 	}
-	
+
 	public static int numPieces(char[][] state, int player)
 	{
 		int count1 = 0;
@@ -144,10 +161,10 @@ public class ChessUtility {
 				if (state[i][j] <= 'Z' && player == 2) count2++;
 			}
 		}
-		
+
 		if(player==1)
-			return count1;
+		return count1;
 		else // player==2
-			return count2;
+		return count2;
 	}
 }
