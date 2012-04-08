@@ -35,6 +35,70 @@ public class ChessUtility {
 		return (int)(diffCount*diffCountFactor) + (int)(diffCheck*diffCheckFactor);
 	}
 	
+	public static int eval3(char[][] state, int player)
+	{
+		double diffCheckFactor = 2.0;
+		double diffCountFactor = 1.0;
+		
+		List<Point> myInCheck = findPiecesInCheck(player, state);
+		List<Point> myPieces = findPieces(player, state);
+		int myInCheckNum = myInCheck.size();
+		int myNumPieces = myPieces.size();	// Lower = better
+		
+		int enemyPlayer = (player == 1) ? 2 : 1;
+		List<Point> enemyInCheck = findPiecesInCheck(enemyPlayer, state);
+		List<Point> enemyPieces = findPieces(enemyPlayer, state);
+		int enemyInCheckNum = enemyInCheck.size();
+		int enemyNumPieces = enemyPieces.size();	// More = better
+		
+		int diffCount = enemyNumPieces - myNumPieces;	// higher = better
+		int diffCheck = myInCheckNum - enemyInCheckNum;	// higher = better
+		
+		int score = 0;
+		
+		score += (int)(diffCount*diffCountFactor);
+		score += (int)(diffCheck*diffCheckFactor);
+		
+		// Modify score based on types of pieces on the board
+		int pieceTypeVal = 0;
+		double pieceTypeFactor = 1.0;
+		
+		double goodVal = 1.0;
+		double badVal = 2.5;
+		
+		for(Point p : myPieces)
+		{
+			char piece = state[p.x][p.y];
+			switch(piece)
+			{
+				case 'p': case 'P': case 'k': case 'K': case 'n': case 'N':
+					pieceTypeVal += goodVal;
+					break;
+				case 'q': case 'Q': case 'r': case 'R': case 'b': case 'B':
+					pieceTypeVal -= badVal;
+					break;
+			}
+		}
+		
+		for(Point p : enemyPieces)
+		{
+			char piece = state[p.x][p.y];
+			switch(piece)
+			{
+				case 'p': case 'P': case 'k': case 'K': case 'n': case 'N':
+					pieceTypeVal -= goodVal;
+					break;
+				case 'q': case 'Q': case 'r': case 'R': case 'b': case 'B':
+					pieceTypeVal += badVal;
+					break;
+			}
+		}
+		
+		score += (int)(pieceTypeVal*pieceTypeFactor);
+		
+		return score;
+	}
+	
 	public static ArrayList<Point> findPiecesInCheck(int player, char[][] board) {
 		// IF YOU ARE COMBINING THIS WITH ANOTHER CLASS, REMEMBER TO REMOVE "FindMoves." BELOW
 		ArrayList<ArrayList<Point>> theirMoves = FindMoves.getMoves(player == 1 ? 2 : 1, board);
