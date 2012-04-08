@@ -37,8 +37,8 @@ public class FindMoves {
 		}
 		
 		boolean foundCapture = false;
-		ArrayList<ArrayList<Point>> moves = new ArrayList<ArrayList<Point>>();
-		
+		ArrayList<ArrayList<Point>> regularMoves = new ArrayList<ArrayList<Point>>();
+		ArrayList<ArrayList<Point>> captureMoves = new ArrayList<ArrayList<Point>>();
 		for(Point p : ourPieces) {
 			int x = p.x;
 			int y = p.y;
@@ -49,12 +49,7 @@ public class FindMoves {
 							ArrayList<Point> toAdd = new ArrayList<Point>();
 							toAdd.add(new Point(x,y));
 							toAdd.add(new Point(x+1,y));
-							moves.add(toAdd);
-						}
-					}
-					if (x == 1 && inBounds(x+2, y)) {
-						if (!hasPiece(x+2, y) && !foundCapture) {
-							moves.add(makePair(x,y,x+2,y));
+							regularMoves.add(toAdd);
 						}
 					}
 					if (inBounds(x+1, y+1)) {
@@ -63,7 +58,7 @@ public class FindMoves {
 							ArrayList<Point> toAdd = new ArrayList<Point>();
 							toAdd.add(new Point(x,y));
 							toAdd.add(new Point(x+1,y+1));
-							moves.add(toAdd);
+							captureMoves.add(toAdd);
 						}
 					}
 					if (inBounds(x+1, y-1)) {
@@ -72,7 +67,7 @@ public class FindMoves {
 							ArrayList<Point> toAdd = new ArrayList<Point>();
 							toAdd.add(new Point(x,y));
 							toAdd.add(new Point(x+1,y-1));
-							moves.add(toAdd);
+							captureMoves.add(toAdd);
 						}
 					}
 					break;
@@ -82,12 +77,7 @@ public class FindMoves {
 							ArrayList<Point> toAdd = new ArrayList<Point>();
 							toAdd.add(new Point(x,y));
 							toAdd.add(new Point(x-1,y));
-							moves.add(toAdd);
-						}
-					}
-					if (x == 6 && inBounds(x-2, y)) {
-						if (!hasPiece(x-2, y) && !foundCapture) {
-							moves.add(makePair(x,y,x-2,y));
+							regularMoves.add(toAdd);
 						}
 					}
 					if (inBounds(x-1, y+1)) {
@@ -96,7 +86,7 @@ public class FindMoves {
 							ArrayList<Point> toAdd = new ArrayList<Point>();
 							toAdd.add(new Point(x,y));
 							toAdd.add(new Point(x-1,y+1));
-							moves.add(toAdd);
+							captureMoves.add(toAdd);
 						}
 					}
 					if (inBounds(x-1, y-1)) {
@@ -105,7 +95,7 @@ public class FindMoves {
 							ArrayList<Point> toAdd = new ArrayList<Point>();
 							toAdd.add(new Point(x,y));
 							toAdd.add(new Point(x-1,y-1));
-							moves.add(toAdd);
+							captureMoves.add(toAdd);
 						}
 					}
 					break;
@@ -117,13 +107,12 @@ public class FindMoves {
 						int newX = x + xsn[i];
 						int newY = y + ysn[i];
 						if (inBounds(newX,newY)) {
-							if (!hasPiece(newX, newY) || hasEnemyPiece(newX, newY, player)) {
-								if (!foundCapture || hasEnemyPiece(newX, newY, player)){
-									moves.add(makePair(x,y,newX,newY));
-								}
-								if (hasEnemyPiece(newX, newY, player)) {
-									foundCapture = true;
-								} 
+							if (!foundCapture && !hasPiece(newX, newY)) {
+								regularMoves.add(makePair(x,y,newX,newY));
+							} 
+							else if (hasEnemyPiece(newX, newY, player)) {
+								captureMoves.add(makePair(x,y,newX,newY));
+								foundCapture = true;
 							}
 						}
 					}
@@ -140,13 +129,13 @@ public class FindMoves {
 							++curDist;
 							if (!hasPiece(newX, newY)) {
 								if (!foundCapture) {
-									moves.add(makePair(x,y,newX,newY));
+									regularMoves.add(makePair(x,y,newX,newY));
 								}
 							}
 							else {
 								if (hasEnemyPiece(newX, newY, player)) {
 									foundCapture = true;
-									moves.add(makePair(x,y,newX,newY));
+									captureMoves.add(makePair(x,y,newX,newY));
 								}
 								break;
 							}
@@ -165,13 +154,13 @@ public class FindMoves {
 							++curDist;
 							if (!hasPiece(newX, newY)) {
 								if (!foundCapture) {
-									moves.add(makePair(x,y,newX,newY));
+									regularMoves.add(makePair(x,y,newX,newY));
 								}
 							}
 							else {
 								if (hasEnemyPiece(newX, newY, player)) {
 									foundCapture = true;
-									moves.add(makePair(x,y,newX,newY));
+									captureMoves.add(makePair(x,y,newX,newY));
 								}
 								break;
 							}
@@ -190,13 +179,13 @@ public class FindMoves {
 							++curDist;
 							if (!hasPiece(newX, newY)) {
 								if (!foundCapture) {
-									moves.add(makePair(x,y,newX,newY));
+									regularMoves.add(makePair(x,y,newX,newY));
 								}
 							}
 							else {
 								if (hasEnemyPiece(newX, newY, player)) {
 									foundCapture = true;
-									moves.add(makePair(x,y,newX,newY));
+									captureMoves.add(makePair(x,y,newX,newY));
 								}
 								break;
 							}
@@ -214,13 +203,13 @@ public class FindMoves {
 						if (inBounds(newX, newY)) {
 							if (!hasPiece(newX, newY)) {
 								if (!foundCapture) {
-									moves.add(makePair(x,y,newX,newY));
+									regularMoves.add(makePair(x,y,newX,newY));
 								}
 							}
 							else {
 								if (hasEnemyPiece(newX, newY, player)) {
 									foundCapture = true;
-									moves.add(makePair(x,y,newX,newY));
+									captureMoves.add(makePair(x,y,newX,newY));
 								}
 								break;
 							}
@@ -232,18 +221,10 @@ public class FindMoves {
 		}
 		
 		if (foundCapture) {
-			ArrayList<ArrayList<Point>> realMoves = new ArrayList<ArrayList<Point>>();
-			for(ArrayList<Point> a : moves) {
-				Point from = a.get(0);
-				Point to = a.get(1);
-				if (hasEnemyPiece(to.x, to.y, player)) {
-					realMoves.add(a);
-				}
-			}
-			return realMoves;
+			return captureMoves;
 		}
 		else {
-			return moves;
+			return regularMoves;
 		}
 		
 	}
